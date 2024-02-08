@@ -4,7 +4,10 @@ This API includes much of the functionality of the [auto-evaluator Streamlit app
 
 And it is the back-end for [the hosted app](https://autoevaluator.langchain.com/).
 
-### `Test locally` - 
+### `Runn locally` - 
+
+1. Install poerty
+
 
 Set API keys: 
 ```
