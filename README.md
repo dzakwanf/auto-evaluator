@@ -124,6 +124,10 @@ Front-end:
 
 `.env.local` contains the env variables needed to run the project. 
 
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
 Back-end:
 
 Specify the API keys for any models that you want to use.
