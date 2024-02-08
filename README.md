@@ -101,8 +101,8 @@ The results from all experiments will be summarized in the table and chart.
 Run the backend from `api` folder:
 
 ```
- pip install -r requirements.txt
- uvicorn main:app
+poetry install
+poetry run make start
  ```
 
 Test the `api` locally:
