@@ -102,7 +102,7 @@ Run the backend from `api` folder:
 
 ```
  pip install -r requirements.txt
- uvicorn evaluator_app:app
+ uvicorn main:app
  ```
 
 Test the `api` locally:
