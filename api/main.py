@@ -26,7 +26,7 @@ from langchain.evaluation.qa import QAEvalChain
 from langchain_community.retrievers import TFIDFRetriever
 from sse_starlette.sse import EventSourceResponse
 from fastapi.middleware.cors import CORSMiddleware
-from langchain_community.embeddings import LlamaCppEmbeddings
+from langchain_community.embeddings import LocalAIEmbeddings
 from langchain_community.embeddings import MosaicMLInstructorEmbeddings
 from fastapi import FastAPI, File, UploadFile, Form
 from langchain.chains.question_answering import load_qa_chain
@@ -49,14 +49,14 @@ def generate_eval(text, chunk, logger):
     num_of_chars = len(text)
     starting_index = random.randint(0, num_of_chars-chunk)
     sub_sequence = text[starting_index:starting_index+chunk]
-    # Set up QAGenerationChain chain using GPT 3.5 as default
-    chain = QAGenerationChain.from_llm(ChatVertexAI(model_name="gemini-pro", temperature=0))
+    # Set up QAGenerationChain chain using Chat bison as default
+    chain = QAGenerationChain.from_llm(ChatVertexAI(model_name="chat-bison", temperature=0))
     eval_set = []
     # Catch any QA generation errors and re-try until QA pair is generated
     awaiting_answer = True
     while awaiting_answer:
         try:
-            qa_pair = chain.invoke(sub_sequence)
+            qa_pair = chain.run(sub_sequence)
             eval_set.append(qa_pair)
             awaiting_answer = False
         except JSONDecodeError:
@@ -97,7 +97,7 @@ def make_llm(model):
     @return: LLM
     """
 
-    if model in ("gemini-pro", "chat-bison"):
+    if model in ("chat-bison", "gemini-pro"):
         llm = ChatVertexAI(model_name=model, temperature=0)
     elif model == "anthropic":
         llm = Anthropic(temperature=0)
@@ -127,8 +127,8 @@ def make_retriever(splits, retriever_type, embeddings, num_neighbors, llm, logge
     if embeddings == "Vertex AI":
         embd = VertexAIEmbeddings()
     # Note: Still WIP (can't be selected by user yet)
-    elif embeddings == "LlamaCppEmbeddings":
-        embd = LlamaCppEmbeddings(model="replicate/vicuna-13b:e6d469c2b11008bb0e446c3e9629232f9674581224536851272c54871f84076e")
+    elif embeddings == "LocalAI":
+        embd = LocalAIEmbeddings(openai_api_base="http://34.128.83.204:8000/v1", model="all-mpnet-base-v2", openai_api_key="sk-")
     # Note: Test
     elif embeddings == "Mosaic":
         embd = MosaicMLInstructorEmbeddings(query_instruction="Represent the query for retrieval: ")
@@ -422,7 +422,7 @@ async def create_response(
     overlap: int = Form(100),
     split_method: str = Form("RecursiveTextSplitter"),
     retriever_type: str = Form("similarity-search"),
-    embeddings: str = Form("Vertex AI"),
+    embeddings: str = Form("LocalAI"),
     model_version: str = Form("gemini-pro"),
     grade_prompt: str = Form("Fast"),
     num_neighbors: int = Form(3),

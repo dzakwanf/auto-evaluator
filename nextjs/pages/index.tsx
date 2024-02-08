@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import HeaderEvaluator, { MenuItem } from "../components/HeaderEvaluator";
 import Sidebar from "../components/Sidebar";
 import { FormValues } from "../utils/types";
-import Demo from "../components/Demo";
+import Demo from "../components/Playground";
 
 const DemoPage = () => {
   const form = useForm<FormValues>({
@@ -13,7 +13,7 @@ const DemoPage = () => {
       chunkSize: 1000,
       overlap: 100,
       splitMethod: "RecursiveTextSplitter",
-      embeddingAlgorithm: "Vertex AI",
+      embeddingAlgorithm: "LocalAI",
       model: "gemini-pro",
       retriever: "similarity-search",
       gradingPrompt: "Descriptive",
@@ -31,7 +31,7 @@ const DemoPage = () => {
           <br />
         </Navbar>
       }
-      header={<HeaderEvaluator activeTab={MenuItem.Demo} />}
+      header={<HeaderEvaluator activeTab={MenuItem.Playground} />}
       styles={(theme) => ({
         main: {
           backgroundColor:

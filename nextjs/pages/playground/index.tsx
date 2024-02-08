@@ -9,12 +9,12 @@ import Playground from "../../components/Playground";
 const PlaygroundPage = () => {
   const form = useForm<FormValues>({
     defaultValues: {
-      evalQuestionsCount: 1,
+      evalQuestionsCount: 5,
       chunkSize: 1000,
       overlap: 100,
       splitMethod: "RecursiveTextSplitter",
-      embeddingAlgorithm: "Vertex AI",
-      model: "gemini-pro",
+      embeddingAlgorithm: "LocalAI",
+      model: "chat-bison",
       retriever: "similarity-search",
       gradingPrompt: "Descriptive",
       numNeighbors: 3,

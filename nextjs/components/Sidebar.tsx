@@ -136,10 +136,8 @@ const Sidebar = ({ form }: { form: Form }) => {
                 <Select
                   {...field}
                   data={[
-                    {
-                      label: "Vertex AI",
-                      value: "Vertex AI",
-                    },
+                    {label: "Vertex AI", value: "Vertex AI"},
+                    {label: "Dzakwan Embbeding", value: "LocalAI"},
                   ]}
                 />
               )}

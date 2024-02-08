@@ -27,7 +27,7 @@ const HeaderEvaluator = ({ activeTab }: { activeTab: MenuItem }) => {
                 gradient={{ from: "blue", to: "#bf2015" }}
                 size={mobileWidth === true ? "14px" : "28px"}
               >
-                Auto-Evaluator
+                Dzakwan Evaluator
               </Text>
             </Group>
           </Link>
@@ -54,7 +54,7 @@ const HeaderEvaluator = ({ activeTab }: { activeTab: MenuItem }) => {
             <Link
               style={{ textDecoration: "none" }}
               href={
-                "https://github.com/dankolesnikov/evaluator-app/blob/main/README.md"
+                ""
               }
               target="_blank"
             >
@@ -74,7 +74,7 @@ const HeaderEvaluator = ({ activeTab }: { activeTab: MenuItem }) => {
               href={"https://github.com/dankolesnikov/evaluator-app"}
               target="_blank"
             >
-              <Image src={githubIcon} alt="github" width={30} height={30} />
+             
             </Link>
           </Group>
         </Group>

@@ -1,5 +1,5 @@
 pandas==1.4.3
-fastapi==0.95.1
+fastapi==0.85.2
 langchain==0.1.5
 python-multipart==0.0.6
 openai==0.27.0
@@ -20,4 +20,3 @@ python-dotenv==1.0.0
 sentry_sdk==1.21.1
 llama-cpp-python==0.1.43
 replicate==0.8.3
-uvicorn==0.22.0

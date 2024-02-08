@@ -35,7 +35,7 @@ Your response should be as follows:
 
 GRADE: (Correct or Incorrect)
 (line break)
-JUSTIFICATION: (Without mentioning the student/teacher framing of this prompt, explain why the STUDENT ANSWER is Correct or Incorrect. Use one or two sentences maximum. Keep the answer as concise as possible.)
+JUSTIFICATION: (Without mentioning the student/teacher framing of this prompt, explain why the STUDENT ANSWER is Correct or Incorrect. Use one or two sentences maximum. Keep the answer as concise as possible. Answer with indonesian)
 """
 
 GRADE_ANSWER_PROMPT = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
@@ -131,7 +131,7 @@ template = """
 
     GRADE: (Correct or Incorrect, depending if the retrieved documents meet the criterion)
     (line break)
-    JUSTIFICATION: (Write out in a step by step manner your reasoning about the criterion to be sure that your conclusion is correct. Use one or two sentences maximum. Keep the answer as concise as possible.)
+    JUSTIFICATION: (Write out in a step by step manner your reasoning about the criterion to be sure that your conclusion is correct. User Indonesian language. Use one or two sentences maximum. Keep the answer as concise as possible.)
     """
 
 GRADE_DOCS_PROMPT = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
