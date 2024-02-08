@@ -14,6 +14,7 @@ import faiss
 import pandas as pd
 from typing import Dict, List
 from json import JSONDecodeError
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_community.llms import MosaicML
 from langchain_community.llms import Anthropic
 from langchain_community.llms import Replicate
@@ -297,8 +298,8 @@ def run_eval(chain, retriever, eval_qa_pair, grade_prompt, retriever_type, num_n
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
-    "localhost:3000",
+    "http://34.128.83.204:3000",
+    "34.128.83.204:3000",
 ]
 
 app.add_middleware(
