@@ -95,8 +95,8 @@ const Sidebar = ({ form }: { form: Form }) => {
                 <Select
                   {...field}
                   data={[
-                    { label: "GPT 3.5 Turbo", value: "gpt-3.5-turbo" },
-                    { label: "GPT 4", value: "gpt-4" },
+                    { label: "Gemini Pro", value: "gemini-pro" },
+                    { label: "Google Bison", value: "chat-bison" },
                     { label: "Anthropic", value: "anthropic" },
                     { label: "Vicuna 13B", value: "vicuna-13b" },
                     { label: "MPT-7B", value: "mosaic" },
@@ -137,8 +137,8 @@ const Sidebar = ({ form }: { form: Form }) => {
                   {...field}
                   data={[
                     {
-                      label: "OpenAI",
-                      value: "OpenAI",
+                      label: "Vertex AI",
+                      value: "Vertex AI",
                     },
                   ]}
                 />

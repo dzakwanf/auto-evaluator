@@ -4,8 +4,6 @@ This is an API to support the LLM QA chain auto-evaluator.
 
 import io
 import os
-from dotenv import load_dotenv
-import sentry_sdk
 import json
 import time
 import pypdf
@@ -16,24 +14,24 @@ import faiss
 import pandas as pd
 from typing import Dict, List
 from json import JSONDecodeError
-from langchain.llms import MosaicML
-from langchain.llms import Anthropic
-from langchain.llms import Replicate
+from langchain_community.llms import MosaicML
+from langchain_community.llms import Anthropic
+from langchain_community.llms import Replicate
 from langchain.schema import Document
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
 from langchain.chains import QAGenerationChain
-from langchain.retrievers import SVMRetriever
+from langchain_community.retrievers import SVMRetriever
 from langchain.evaluation.qa import QAEvalChain
-from langchain.retrievers import TFIDFRetriever
+from langchain_community.retrievers import TFIDFRetriever
 from sse_starlette.sse import EventSourceResponse
 from fastapi.middleware.cors import CORSMiddleware
-from langchain.embeddings import LlamaCppEmbeddings
-from langchain.embeddings import MosaicMLInstructorEmbeddings
+from langchain_community.embeddings import LlamaCppEmbeddings
+from langchain_community.embeddings import MosaicMLInstructorEmbeddings
 from fastapi import FastAPI, File, UploadFile, Form
-from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.chains.question_answering import load_qa_chain
+from langchain_google_vertexai import ChatVertexAI
+from langchain_google_vertexai import VertexAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from text_utils import GRADE_DOCS_PROMPT, GRADE_ANSWER_PROMPT, GRADE_DOCS_PROMPT_FAST, GRADE_ANSWER_PROMPT_FAST, GRADE_ANSWER_PROMPT_BIAS_CHECK, GRADE_ANSWER_PROMPT_OPENAI, QA_CHAIN_PROMPT, QA_CHAIN_PROMPT_LLAMA
 
@@ -52,13 +50,13 @@ def generate_eval(text, chunk, logger):
     starting_index = random.randint(0, num_of_chars-chunk)
     sub_sequence = text[starting_index:starting_index+chunk]
     # Set up QAGenerationChain chain using GPT 3.5 as default
-    chain = QAGenerationChain.from_llm(ChatOpenAI(temperature=0))
+    chain = QAGenerationChain.from_llm(ChatVertexAI(model_name="gemini-pro", temperature=0))
     eval_set = []
     # Catch any QA generation errors and re-try until QA pair is generated
     awaiting_answer = True
     while awaiting_answer:
         try:
-            qa_pair = chain.run(sub_sequence)
+            qa_pair = chain.invoke(sub_sequence)
             eval_set.append(qa_pair)
             awaiting_answer = False
         except JSONDecodeError:
@@ -99,8 +97,8 @@ def make_llm(model):
     @return: LLM
     """
 
-    if model in ("gpt-3.5-turbo", "gpt-4"):
-        llm = ChatOpenAI(model_name=model, temperature=0)
+    if model in ("gemini-pro", "chat-bison"):
+        llm = ChatVertexAI(model_name=model, temperature=0)
     elif model == "anthropic":
         llm = Anthropic(temperature=0)
     elif model == "Anthropic-100k":
@@ -126,8 +124,8 @@ def make_retriever(splits, retriever_type, embeddings, num_neighbors, llm, logge
 
     logger.info("`Making retriever ...`")
     # Set embeddings
-    if embeddings == "OpenAI":
-        embd = OpenAIEmbeddings()
+    if embeddings == "Vertex AI":
+        embd = VertexAIEmbeddings()
     # Note: Still WIP (can't be selected by user yet)
     elif embeddings == "LlamaCppEmbeddings":
         embd = LlamaCppEmbeddings(model="replicate/vicuna-13b:e6d469c2b11008bb0e446c3e9629232f9674581224536851272c54871f84076e")
@@ -198,12 +196,14 @@ def grade_model_answer(predicted_dataset, predictions, grade_answer_prompt, logg
         prompt = GRADE_ANSWER_PROMPT
 
     # Note: GPT-4 grader is advised by OAI 
-    eval_chain = QAEvalChain.from_llm(llm=ChatOpenAI(model_name="gpt-4", temperature=0),
+    eval_chain = QAEvalChain.from_llm(llm=ChatVertexAI(model_name="chat-bison", temperature=0),
                                       prompt=prompt)
     graded_outputs = eval_chain.evaluate(predicted_dataset,
                                          predictions,
                                          question_key="question",
-                                         prediction_key="result")
+                                         prediction_key="result",
+                                         )
+    print(graded_outputs)
     return graded_outputs
 
 
@@ -223,12 +223,14 @@ def grade_model_retrieval(gt_dataset, predictions, grade_docs_prompt, logger):
         prompt = GRADE_DOCS_PROMPT
 
     # Note: GPT-4 grader is advised by OAI
-    eval_chain = QAEvalChain.from_llm(llm=ChatOpenAI(model_name="gpt-4", temperature=0),
+    eval_chain = QAEvalChain.from_llm(llm=ChatVertexAI(model_name="chat-bison", temperature=0),
                                       prompt=prompt)
     graded_outputs = eval_chain.evaluate(gt_dataset,
                                          predictions,
                                          question_key="question",
-                                         prediction_key="result")
+                                         prediction_key="result",
+                                         )
+    print(graded_outputs)
     return graded_outputs
 
 
@@ -291,23 +293,12 @@ def run_eval(chain, retriever, eval_qa_pair, grade_prompt, retriever_type, num_n
         gt_dataset, retrieved_docs, grade_prompt, logger)
     return graded_answers, graded_retrieval, latency, predictions
 
-load_dotenv()
-
-if os.environ.get("ENVIRONMENT") != "development":
-    sentry_sdk.init(
-    dsn="https://065aa152c4de4e14af9f9e7335c8eae4@o4505106202820608.ingest.sentry.io/4505106207735808",
-    traces_sample_rate=1.0,
-    )
 
 app = FastAPI()
 
 origins = [
     "http://localhost:3000",
     "localhost:3000",
-    "https://evaluator-ui.vercel.app/"
-    "https://evaluator-ui.vercel.app"
-    "evaluator-ui.vercel.app/"
-    "evaluator-ui.vercel.app"
 ]
 
 app.add_middleware(
@@ -404,8 +395,8 @@ def run_evaluator(
 
         # Assemble output
         d = pd.DataFrame(predictions)
-        d['answerScore'] = [g['text'] for g in graded_answers]
-        d['retrievalScore'] = [g['text'] for g in graded_retrieval]
+        d['answerScore'] = [g['results'] for g in graded_answers]
+        d['retrievalScore'] = [g['results'] for g in graded_retrieval]
         d['latency'] = latency
 
         # Summary statistics
@@ -431,8 +422,8 @@ async def create_response(
     overlap: int = Form(100),
     split_method: str = Form("RecursiveTextSplitter"),
     retriever_type: str = Form("similarity-search"),
-    embeddings: str = Form("OpenAI"),
-    model_version: str = Form("gpt-3.5-turbo"),
+    embeddings: str = Form("Vertex AI"),
+    model_version: str = Form("gemini-pro"),
     grade_prompt: str = Form("Fast"),
     num_neighbors: int = Form(3),
     test_dataset: str = Form("[]"),
