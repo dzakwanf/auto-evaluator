@@ -8,9 +8,7 @@ services:
     container_name: be-eval
     ports:
       - "8080:8080"
-    environment:
-      - DOCKER_BUILDKIT=1
-
+    
   fe-eval:
     build:
       context: nextjs
@@ -18,5 +16,4 @@ services:
     container_name: fe-eval
     ports:
       - "3000:3000"
-    environment:
-      - DOCKER_BUILDKIT=1
+    
