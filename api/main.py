@@ -429,7 +429,7 @@ async def create_response(
     overlap: int = Form(100),
     split_method: str = Form("RecursiveTextSplitter"),
     retriever_type: str = Form("similarity-search"),
-    embeddings: str = Form("LocalAI"),
+    embeddings: str = Form("Model 1"),
     model_version: str = Form("gemini-pro"),
     grade_prompt: str = Form("Fast"),
     num_neighbors: int = Form(3),

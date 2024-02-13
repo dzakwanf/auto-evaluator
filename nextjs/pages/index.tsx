@@ -13,7 +13,7 @@ const DemoPage = () => {
       chunkSize: 1000,
       overlap: 100,
       splitMethod: "RecursiveTextSplitter",
-      embeddingAlgorithm: "LocalAI",
+      embeddingAlgorithm: "Model 1",
       model: "gemini-pro",
       retriever: "similarity-search",
       gradingPrompt: "Descriptive",
