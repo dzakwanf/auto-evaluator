@@ -6,6 +6,10 @@ services:
       context: api
     image: api-eval
     container_name: be-eval
+    volumes:
+      - '"service_account_path":/app/.google_cloud_service_account.json:ro'
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/.google_cloud_service_account.json
     ports:
       - "8080:8080"
     
