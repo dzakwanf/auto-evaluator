@@ -128,8 +128,14 @@ def make_retriever(splits, retriever_type, embeddings, num_neighbors, llm, logge
     if embeddings == "Vertex AI":
         embd = VertexAIEmbeddings()
     # Note: Still WIP (can't be selected by user yet)
-    elif embeddings == "LocalAI":
+    elif embeddings == "Model 1":
         embd = LocalAIEmbeddings(openai_api_base="http://34.128.83.204:8000/v1", model="all-mpnet-base-v2", openai_api_key="sk-")
+    elif embeddings == "Model 2":
+        embd = LocalAIEmbeddings(openai_api_base="http://34.71.137.98:8001/v1", model="multi-qa-mpnet-base-dot-v1", openai_api_key="sk-")
+    elif embeddings == "Model 3":
+        embd = LocalAIEmbeddings(openai_api_base="http://34.71.137.98:8002/v1", model="all-MiniLM-L12-v2", openai_api_key="sk-")
+    elif embeddings == "Model 4":
+        embd = LocalAIEmbeddings(openai_api_base="http://34.71.137.98:8003/v1", model="gtr-t5-large", openai_api_key="sk-")
     # Note: Test
     elif embeddings == "Mosaic":
         embd = MosaicMLInstructorEmbeddings(query_instruction="Represent the query for retrieval: ")

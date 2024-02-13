@@ -318,7 +318,7 @@ const Playground = ({ form }: { form: Form }) => {
             setResults([]);
             setShouldShowProgress(false);
             setTestFilesDropzoneDisabled(false);
-            setFileUploadDisabled(true);
+            setFileUploadDisabled(false);
           }}
           maxFiles={1}
           multiple={false}
