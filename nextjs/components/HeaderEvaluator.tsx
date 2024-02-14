@@ -39,7 +39,7 @@ const HeaderEvaluator = ({ activeTab }: { activeTab: MenuItem }) => {
                 borderBottom: activeTab === MenuItem.Demo ? borderBottom : null,
               }}
             >
-              <Text c="black">Demo</Text>
+              <Text c="black"></Text>
             </Link>
             <Link
               href="/playground"
@@ -58,7 +58,7 @@ const HeaderEvaluator = ({ activeTab }: { activeTab: MenuItem }) => {
               }
               target="_blank"
             >
-              <Text c="black">Docs</Text>
+              <Text c="black"></Text>
             </Link>
             <Link
               style={{
@@ -68,10 +68,10 @@ const HeaderEvaluator = ({ activeTab }: { activeTab: MenuItem }) => {
               }}
               href="/about"
             >
-              <Text c="black">About</Text>
+              <Text c="black"></Text>
             </Link>
             <Link
-              href={"https://github.com/dankolesnikov/evaluator-app"}
+              href={""}
               target="_blank"
             >
              

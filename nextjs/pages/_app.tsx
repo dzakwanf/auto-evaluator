@@ -43,7 +43,7 @@ export default function App(props: AppProps) {
     fontFamily:
       "Greycliff CF, Inter,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue,Arial, Noto Sans",
   };
-  const pageName = "Auto-Evaluator";
+  const pageName = "Dzakwan Evaluator";
   useEffect(() => {
     if (!IS_DEV) {
       // @ts-expect-error
