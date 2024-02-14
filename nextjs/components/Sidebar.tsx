@@ -137,10 +137,10 @@ const Sidebar = ({ form }: { form: Form }) => {
                   {...field}
                   data={[
                     {label: "Vertex AI", value: "Vertex AI"},
-                    {label: "Mpnet Base v2", value: "Model 1"},
-                    {label: "Multi QA Mpnet", value: "Model 2"},
-                    {label: "All MiniLM L12", value: "Model 3"},
-                    {label: "GTR T5 Large", value: "Model 4"},
+                    {label: "Model 1", value: "Model 1"},
+                    {label: "Model 2", value: "Model 2"},
+                    {label: "Model 3", value: "Model 3"},
+                    {label: "Model 4", value: "Model 4"},
                   ]}
                 />
               )}

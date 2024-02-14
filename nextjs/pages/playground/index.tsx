@@ -13,7 +13,7 @@ const PlaygroundPage = () => {
       chunkSize: 1000,
       overlap: 100,
       splitMethod: "RecursiveTextSplitter",
-      embeddingAlgorithm: "LocalAI",
+      embeddingAlgorithm: "Model 1",
       model: "chat-bison",
       retriever: "similarity-search",
       gradingPrompt: "Descriptive",
