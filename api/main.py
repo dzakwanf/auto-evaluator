@@ -12,6 +12,7 @@ import logging
 import itertools
 import faiss
 import pandas as pd
+from dotenv import load_dotenv
 from typing import Dict, List
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,6 +36,18 @@ from langchain_google_vertexai import ChatVertexAI
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from text_utils import GRADE_DOCS_PROMPT, GRADE_ANSWER_PROMPT, GRADE_DOCS_PROMPT_FAST, GRADE_ANSWER_PROMPT_FAST, GRADE_ANSWER_PROMPT_BIAS_CHECK, GRADE_ANSWER_PROMPT_OPENAI, QA_CHAIN_PROMPT, QA_CHAIN_PROMPT_LLAMA
+
+load_dotenv()
+MODEL_1_URL = os.getenv("MODEL_1_URL")
+MODEL_2_URL = os.getenv("MODEL_2_URL")
+MODEL_3_URL = os.getenv("MODEL_3_URL")
+MODEL_4_URL = os.getenv("MODEL_4_URL")
+
+
+MODEL_NAME_1 = os.getenv("MODEL_NAME_1")
+MODEL_NAME_2 = os.getenv("MODEL_NAME_2")
+MODEL_NAME_3 = os.getenv("MODEL_NAME_3")
+MODEL_NAME_4 = os.getenv("MODEL_NAME_4")
 
 def generate_eval(text, chunk, logger):
     """
@@ -129,13 +142,13 @@ def make_retriever(splits, retriever_type, embeddings, num_neighbors, llm, logge
         embd = VertexAIEmbeddings()
     # Note: Still WIP (can't be selected by user yet)
     elif embeddings == "Model 1":
-        embd = LocalAIEmbeddings(openai_api_base="http://34.128.83.204:8000/v1", model="all-mpnet-base-v2", openai_api_key="sk-")
+        embd = LocalAIEmbeddings(openai_api_base=MODEL_1_URL, model=MODEL_NAME_1, openai_api_key="sk-")
     elif embeddings == "Model 2":
-        embd = LocalAIEmbeddings(openai_api_base="http://34.71.137.98:8001/v1", model="multi-qa-mpnet-base-dot-v1", openai_api_key="sk-")
+        embd = LocalAIEmbeddings(openai_api_base=MODEL_2_URL, model=MODEL_NAME_2, openai_api_key="sk-")
     elif embeddings == "Model 3":
-        embd = LocalAIEmbeddings(openai_api_base="http://34.71.137.98:8002/v1", model="all-MiniLM-L12-v2", openai_api_key="sk-")
+        embd = LocalAIEmbeddings(openai_api_base=MODEL_3_URL, model=MODEL_NAME_3, openai_api_key="sk-")
     elif embeddings == "Model 4":
-        embd = LocalAIEmbeddings(openai_api_base="http://34.71.137.98:8003/v1", model="gtr-t5-large", openai_api_key="sk-")
+        embd = LocalAIEmbeddings(openai_api_base=MODEL_4_URL, model=MODEL_NAME_4, openai_api_key="sk-")
     # Note: Test
     elif embeddings == "Mosaic":
         embd = MosaicMLInstructorEmbeddings(query_instruction="Represent the query for retrieval: ")
